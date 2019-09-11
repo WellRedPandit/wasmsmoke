@@ -1,0 +1,45 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>WebAssembly Smoke Test</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <link rel="icon" type="image/png" href="./favicon.png">
+  <link rel="stylesheet" href="https://unpkg.com/sanitize.css">
+  <link rel="stylesheet" href="./style.css">
+</head>
+
+<body>
+
+<script src="./wasm_exec.js"></script>
+
+<script>
+  if (!WebAssembly.instantiateStreaming) { // polyfill
+    WebAssembly.instantiateStreaming = async (resp, importObject) => {
+      const source = await (await resp).arrayBuffer();
+      return await WebAssembly.instantiate(source, importObject);
+    };
+  }
+
+  const go = new Go();
+  let mod, inst;
+  WebAssembly.instantiateStreaming(fetch("./smoke.wasm"), go.importObject).then((result) => {
+    mod = result.module;
+    inst = result.instance;
+  }).catch((err) => {
+    console.error(err);
+  });
+
+  async function run() {
+    console.clear();
+    await go.run(inst);
+    inst = await WebAssembly.instantiate(mod, go.importObject); // reset instance
+  }
+
+  run();
+</script>
+
+<div id="root" class="pad50px">ROOT</div>
+
+</body>
+</html>
