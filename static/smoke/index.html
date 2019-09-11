@@ -24,7 +24,7 @@
   WebAssembly.instantiateStreaming(fetch("./smoke.wasm"), go.importObject).then((result) => {
     mod = result.module;
     inst = result.instance;
-    document.getElementById("wasmReady").innerHTML = "Loaded.";
+    document.getElementById("loadWasm").disabled = false;
   }).catch((err) => {
     console.error(err);
   });
@@ -33,11 +33,13 @@
     console.clear();
     await go.run(inst);
     inst = await WebAssembly.instantiate(mod, go.importObject); // reset instance
+    document.getElementById("wasmReady").innerHTML = "Loaded.";
   }
 </script>
 
-<body onload="run();">
-  <div id="wasmReady" disabled>Loading...</div>
+<body > <!-- onload="run();" -->
+  <button onclick="run();" id="loadWasm" disabled>Load</button>
+  <div id="wasmReady"></div>
   <div id="root" class="pad50px">ROOT</div>
 </body>
 

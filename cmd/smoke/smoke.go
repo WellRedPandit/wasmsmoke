@@ -42,6 +42,9 @@ func main() {
 
   forever := make(chan bool)
   log.Print("ready...")
+  js.Global().Get("document").
+    Call("getElementById", "wasmReady").
+    Set("innerHTML", "<b>Wasm Ready</b>")
   <-forever
 }
 
