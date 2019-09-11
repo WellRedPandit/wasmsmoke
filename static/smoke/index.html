@@ -9,9 +9,7 @@
   <link rel="stylesheet" href="./style.css">
 </head>
 
-<body>
-
-<script src="./wasm_exec.js"></script>
+<script src="wasm_exec.js"></script>
 
 <script>
   if (!WebAssembly.instantiateStreaming) { // polyfill
@@ -26,6 +24,7 @@
   WebAssembly.instantiateStreaming(fetch("./smoke.wasm"), go.importObject).then((result) => {
     mod = result.module;
     inst = result.instance;
+    document.getElementById("wasmReady").innerHTML = "Loaded.";
   }).catch((err) => {
     console.error(err);
   });
@@ -35,11 +34,11 @@
     await go.run(inst);
     inst = await WebAssembly.instantiate(mod, go.importObject); // reset instance
   }
-
-  run();
 </script>
 
-<div id="root" class="pad50px">ROOT</div>
-
+<body onload="run();">
+  <div id="wasmReady" disabled>Loading...</div>
+  <div id="root" class="pad50px">ROOT</div>
 </body>
+
 </html>
