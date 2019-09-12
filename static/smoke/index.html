@@ -37,7 +37,7 @@
 
   window.addEventListener('load', (event) => {
     console.log('window load fired');
-    run().then(console.log);
+    run().then(x => console.log(x)).catch(x => console.log(x));
   });
 </script>
 
