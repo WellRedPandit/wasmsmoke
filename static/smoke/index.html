@@ -30,17 +30,23 @@
   });
 
   async function run() {
-    console.clear();
     await go.run(inst);
     inst = await WebAssembly.instantiate(mod, go.importObject); // reset instance
-    document.getElementById("wasmReady").innerHTML = "Loaded.";
+    return "instantiated";
   }
+
+  window.addEventListener('load', (event) => {
+    console.log('window load fired');
+    run().then(console.log);
+  });
 </script>
 
-<body > <!-- onload="run();" -->
-  <button onclick="run();" id="loadWasm" disabled>Load</button>
-  <div id="wasmReady"></div>
-  <div id="root" class="pad50px">ROOT</div>
+<body>
+  <div>
+    <button onclick="run();" id="loadWasm" disabled>Load</button>
+    <span id="wasmReady"></span>
+  </div>
+  <div id="root" class="card">If no digits, click Load above</div>
 </body>
 
 </html>

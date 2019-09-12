@@ -41,10 +41,13 @@ func main() {
   draSearch.Set("onclick", funRootOnClick)
 
   forever := make(chan bool)
-  log.Print("ready...")
   js.Global().Get("document").
     Call("getElementById", "wasmReady").
-    Set("innerHTML", "<b>Wasm Ready</b>")
+    Set("innerHTML", "<b>Loaded</b>")
+  js.Global().Get("document").
+    Call("getElementById", "loadWasm").
+    Set("hidden", true)
+  RootOnClick(js.ValueOf(nil),nil)
   <-forever
 }
 
