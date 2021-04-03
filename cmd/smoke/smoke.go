@@ -37,16 +37,11 @@ func nextDigit() Digit {
 
 func main() {
   funRootOnClick := js.FuncOf(RootOnClick)
-  draSearch := js.Global().Get("document").Call("getElementById", "root")
-  draSearch.Set("onclick", funRootOnClick)
+  rootDiv := js.Global().Get("document").Call("getElementById", "root")
+  rootDiv.Set("onclick", funRootOnClick)
 
   forever := make(chan bool)
-  js.Global().Get("document").
-    Call("getElementById", "wasmReady").
-    Set("innerHTML", "<b>Loaded</b>")
-  js.Global().Get("document").
-    Call("getElementById", "loadWasm").
-    Set("hidden", true)
+  // load a digit
   RootOnClick(js.ValueOf(nil),nil)
   <-forever
 }

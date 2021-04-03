@@ -1,5 +1,25 @@
 # WebAssembly Smoke Test
 
+## Steps
+
+if upgrading go, run
+
+`./bootstrap_wasm_exec.sh`
+
+then to build
+
+```
+./build_server.sh
+./build_smoke.sh
+
+```
+
+then to run
+
+`./server`
+
+then navigate to http://localhost:3131/static/smoke/ in your browser
+
 ## Notes
 
 Mac:

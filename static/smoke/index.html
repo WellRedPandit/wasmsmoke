@@ -9,10 +9,11 @@
   <link rel="stylesheet" href="./style.css">
 </head>
 
-<script src="wasm_exec.js"></script>
+<script src="./wasm_exec.js"></script>
 
 <script>
   if (!WebAssembly.instantiateStreaming) { // polyfill
+    console.log("in polyfill");
     WebAssembly.instantiateStreaming = async (resp, importObject) => {
       const source = await (await resp).arrayBuffer();
       return await WebAssembly.instantiate(source, importObject);
@@ -20,33 +21,16 @@
   }
 
   const go = new Go();
-  let mod, inst;
   WebAssembly.instantiateStreaming(fetch("./smoke.wasm"), go.importObject).then((result) => {
-    mod = result.module;
-    inst = result.instance;
-    document.getElementById("loadWasm").disabled = false;
+    go.run(result.instance);
   }).catch((err) => {
     console.error(err);
-  });
-
-  async function run() {
-    await go.run(inst);
-    inst = await WebAssembly.instantiate(mod, go.importObject); // reset instance
-    return "instantiated";
-  }
-
-  window.addEventListener('load', (event) => {
-    console.log('window load fired');
-    run().then(x => console.log(x)).catch(x => console.log(x));
   });
 </script>
 
 <body>
-  <div>
-    <button onclick="run();" id="loadWasm" disabled>Load</button>
-    <span id="wasmReady"></span>
-  </div>
-  <div id="root" class="card">If no digits, click Load above</div>
+  <div id="root" class="card"></div>
+  <div>Click on the digit, it will change.</div>
 </body>
 
 </html>
